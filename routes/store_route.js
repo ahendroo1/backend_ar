@@ -1,7 +1,7 @@
 var express = require('express');
 var store_router = express.Router();
 var bcrypt = require('bcrypt');
-var session = require('express-session')
+var session = require('express-session');
 var Store = require('../models/store_model');
 var User = require('../models/user_model');
 
@@ -30,12 +30,78 @@ store_router.use(cors())
 // url : api/login/
 store_router.get('/', function (req, res) {
 
-	User.find((err, user)=>{
-		res.send(user);
-	})
+	// User.find((err, user)=>{
+	// 	res.send(user);
+	// })
 
+	res.send('store')
 }); 
 
+
+store_router.post('/cart', (req, res) => {
+
+	if (req.body.user_id !== null) {
+		// console.log(data_find.length)
+		Store.findOne({ user_id: req.body.user_id }, function(err, user) {
+			
+			if (user) {
+
+				new Cart({
+
+					id_store: store.data._id,
+					id_user: store.id_user,
+					nama_barang: req.body.nama_barang,
+					harga: req.body.harga,
+					tgl_cart: d.getDay() + '-' + d.getMonth() + '-' + d.getFullYear(),
+				
+				}).save().then((data)=>{
+					console.log('Data masuk cart: '+ data);
+					res.send(data);
+				})
+
+ 
+			} else { 
+
+				new Store({
+
+					id_user: req.body.user_id,
+					status_pembayaran: '',
+					status_pengiriman: '',
+					tgl_store: d.getDay() + '-' + d.getMonth() + '-' + d.getFullYear(),
+				
+				}).save().then((store)=>{
+					
+					req.session.id_store = store._id ;
+				})
+
+				if(!req.session.id_store){
+					console.log('tidak ada')
+				} else {
+					console.log(req.session.id_store)
+				}
+				// new Cart({
+
+				// 	id_store: store.data._id, 
+				// 	id_user: store.id_user,
+				// 	nama_barang: req.body.nama_barang,
+				// 	harga: req.body.harga,
+				// 	tgl_cart: d.getDay() + '-' + d.getMonth() + '-' + d.getFullYear(),
+				
+				// }).save().then((data)=>{
+				// 	console.log('Data masuk cart store: '+ data);
+				// 	res.send(data);
+				// })
+				
+
+
+			}
+		});
+
+	} else {
+		res.send('Data masih ada yang kosong')
+	}
+	
+})
 
 store_router.post('/', (req, res) => {
 
@@ -46,9 +112,7 @@ store_router.post('/', (req, res) => {
 
 				if(bcrypt.compareSync(req.body.logpassword, user.password)){
 
-					req.session.userId = user._id;
-					req.session.userEmail = user.email;
-					req.session.userUsername = user.username;
+					
                     return res.send(user);
                     
 				} else {

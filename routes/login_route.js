@@ -56,9 +56,9 @@ login_router.post('/', (req, res) => {
 
 				if(bcrypt.compareSync(req.body.logpassword, user.password)){
 
-					req.session.userId = user._id;
-					req.session.userEmail = user.email;
-					req.session.userUsername = user.username;
+					// req.session.userId = user._id;
+					// req.session.userEmail = user.email;
+					// req.session.userUsername = user.username;
 					return res.send(user);
 				} else {
 					return res.send(err);
@@ -79,7 +79,7 @@ login_router.get('/confirm_registrasi/:_id/:pass', (req, res) => {
 
 				if(req.params.pass === user.password){
 
-					User.findOneAndUpdate({_id: req.params._id }, {$set:{status: 0}} , (err, doc) => {
+					User.findOneAndUpdate({_id: req.params._id }, {$set:{status: 1}} , (err, doc) => {
 
 						if(err){
 

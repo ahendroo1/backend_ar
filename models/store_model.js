@@ -1,11 +1,11 @@
 const mongoose = require('mongoose'); 
 const Schema = mongoose.Schema;
-const storeSchema = new Schema({ 
+const storeSchema = new Schema({
 
     id_user: String,
-    order: Array,
-    payment: Array,
-    tgl_order_all: String
+    status_pembayaran:String,
+    status_pengiriman: String,
+    tgl_store: String
 
 });
 
