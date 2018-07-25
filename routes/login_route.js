@@ -39,23 +39,18 @@ login_router.use(cors())
 
 // url : api/login/ 
 login_router.get('/', function (req, res) {
-
 	User.find((err, user)=>{
 		res.send(user);
 	})
-
 });
 
 login_router.post('/', (req, res) => {
 
-
 	if (req.body.logemail && req.body.logpassword) {
-		 
 		User.findOne({ email: req.body.logemail }, (err, user) => {
 			if (user) {
 
 				if(bcrypt.compareSync(req.body.logpassword, user.password)){
-
 					// req.session.userId = user._id;
 					// req.session.userEmail = user.email;
 					// req.session.userUsername = user.username;
